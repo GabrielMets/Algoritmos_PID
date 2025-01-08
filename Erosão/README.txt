@@ -1,0 +1,1 @@
+Processamento morfológico de imagens - Algoritmo de Erosão
