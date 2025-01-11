@@ -1,57 +1,81 @@
+# Programa responsavel por realizar o fechamento da imagem 02.jpg
+# Autores: Gabriel Tadioto e Gabriel Santos da Silva
+
 import cv2
-import numpy as np
+import copy
+
+def matriz_equal(mat_A, mat_B):
+    flag = True
+    for i in range(len(mat_A)):
+        for j in range(len(mat_A[0])):
+            if mat_A[i][j] != mat_B[i][j]:
+                flag = False
+    return flag
+
+def sum_matriz(matriz):
+    sum = 0
+    for i in range(len(matriz)):
+        for j in range(len(matriz[0])):
+            sum += matriz[i][j]
+    return sum
 
 def dilatacao(imagem, elemento_estruturante):
     #pegar as caracteristicas da imagem binaria e da matriz elemento estruturante  
-    altura, largura = imagem.shape
-    altura_e, largura_e = elemento_estruturante.shape
+    altura = len(imagem)
+    largura = len(imagem[0])
+
+    altura_e = len(elemento_estruturante)
+    largura_e = len(elemento_estruturante[0])
     
     #// 2 : divide por 2 e arredonda para baixo. Descobre o centro.
     meio_altura, meio_largura = altura_e // 2, largura_e // 2
 
-    #cria imagem de saida
-    imagem_saida = np.zeros_like(imagem)
-    for i in range(meio_altura, altura - meio_altura): #percorrerá todas as linhas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente.
-        for j in range(meio_largura, largura - meio_largura): #percorrerá todas as colunas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente.
-            #cont += 1
-            #o roi é uma matriz que extrai um pedaço da imagem com o mesmo tamanho do elemento estruturante. 
+    imagem_saida = copy.copy(imagem) # utilizei copy, pois se fosse atribuido apenas com "=", ele funciona como ponteiro alterando as 2 imagens
+
+    for i in range(len(imagem)):
+        for j in range(len(imagem[0])):
+            imagem_saida[i][j] = 0
+
+    for i in range(meio_altura, altura - meio_altura): #percorrerá todas as linhas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente
+        for j in range(meio_largura, largura - meio_largura): #percorrerá todas as colunas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente
+
+            #o roi é uma matriz que extrai um pedaço da imagem com o mesmo tamanho do elemento estruturante
             roi = imagem[i - meio_altura:i + meio_altura + 1, j - meio_largura:j + meio_largura + 1]
-            # print("iteração: ", cont)
-            # print("roi: ", roi)
-            #print()
-            #verifica se a imgem cabe no tamanho do elemento_estruturante usando o "np.array_equal" que verifica se dois arrays são iguais elemento a elemento.
-            if np.sum(roi):
-                imagem_saida[i, j] = 255 #pinta de branco, se o pixel cabe no elemento_estruturante.
+            
+            if sum_matriz(roi):
+                imagem_saida[i, j] = 255 #pinta de branco
             else:
-                imagem_saida[i, j] = 0 #pinta de preto, se o pixel não cabe no elemento_estruturante.
+                imagem_saida[i, j] = 0 #pinta de preto
 
     return imagem_saida
 
 def erosao(imagem, elemento_estruturante):
     #pegar as caracteristicas da imagem binaria e da matriz elemento estruturante  
-    altura, largura = imagem.shape
-    altura_e, largura_e = elemento_estruturante.shape
+    altura = len(imagem)
+    largura = len(imagem[0])
+
+    altura_e = len(elemento_estruturante)
+    largura_e = len(elemento_estruturante[0])
     
     #// 2 : divide por 2 e arredonda para baixo. Descobre o centro.
     meio_altura, meio_largura = altura_e // 2, largura_e // 2
 
-    #cria imagem de saida
-    imagem_saida = np.zeros_like(imagem)
-    #cont = 1
-    #arosão:
-    for i in range(meio_altura, altura - meio_altura): #percorrerá todas as linhas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente.
-        for j in range(meio_largura, largura - meio_largura): #percorrerá todas as colunas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente.
-            #cont += 1
-            #o roi é uma matriz que extrai um pedaço da imagem com o mesmo tamanho do elemento estruturante. 
+    imagem_saida = copy.copy(imagem) # utilizei copy, pois se fosse atribuido apenas com "=", ele funciona como ponteiro alterando as 2 imagens
+
+    for i in range(len(imagem)):
+        for j in range(len(imagem[0])):
+            imagem_saida[i][j] = 0
+
+    for i in range(meio_altura, altura - meio_altura): #percorrerá todas as linhas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente
+        for j in range(meio_largura, largura - meio_largura): #percorrerá todas as colunas da imagem, exceto as bordas, onde o elemento estruturante não caberia completamente
+
+            #o roi é uma matriz que extrai um pedaço da imagem com o mesmo tamanho do elemento estruturante
             roi = imagem[i - meio_altura:i + meio_altura + 1, j - meio_largura:j + meio_largura + 1]
-            #print("iteração: ", cont)
-            #print("roi: ", roi)
-            #print()
-            #verifica se a imgem cabe no tamanho do elemento_estruturante usando o "np.array_equal" que verifica se dois arrays são iguais elemento a elemento.
-            if np.array_equal(roi & elemento_estruturante, elemento_estruturante):
-                imagem_saida[i, j] = 255 #pinta de branco, se o pixel cabe no elemento_estruturante.
+            
+            if matriz_equal(roi & elemento_estruturante, elemento_estruturante):
+                imagem_saida[i, j] = 255 #pinta de branco
             else:
-                imagem_saida[i, j] = 0 #pinta de preto, se o pixel não cabe no elemento_estruturante.
+                imagem_saida[i, j] = 0 #pinta de preto
 
     return imagem_saida
 
@@ -69,17 +93,16 @@ def main():
     #imagem binária
     _, imagem_binaria = cv2.threshold(imagem, 127, 255, cv2.THRESH_BINARY)
     
-    elemento_estruturante = np.array([[1, 1, 1, 1, 1],
-                                    [1, 1, 1, 1, 1],
-                                    [1, 1, 1, 1, 1],
-                                    [1, 1, 1, 1, 1],
-                                    [1, 1, 1, 1, 1]], dtype=np.uint8)
+    elemento_estruturante = [[1, 1, 1, 1, 1],
+                            [1, 1, 1, 1, 1],
+                            [1, 1, 1, 1, 1],
+                            [1, 1, 1, 1, 1],
+                            [1, 1, 1, 1, 1]]
 
     imagem_fechada = fechamento(imagem_binaria, elemento_estruturante)
 
     cv2.imshow("Imagem Binaria", imagem_binaria)
     cv2.imshow("Imagem Fechada", imagem_fechada)
-    
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
