@@ -1,4 +1,4 @@
-# Programa responsavel por realizar a abertura da imagem 02.jpg
+# Programa responsavel por realizar executar o algoritmo de abertura sobre a imagem 01.jpg
 # Autores: Gabriel Tadioto e Gabriel Santos da Silva
 
 import cv2

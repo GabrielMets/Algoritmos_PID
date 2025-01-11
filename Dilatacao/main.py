@@ -1,4 +1,4 @@
-# Programa responsavel por realizar dilatacao da imagem 02.jpg
+# Programa responsavel por realizar executar o algoritmo de dilatacao sobre a imagem 01.jpg
 # Autores: Gabriel Tadioto e Gabriel Santos da Silva
 
 import cv2
