@@ -43,11 +43,8 @@ def dilatacao(imagem, elemento_estruturante):
     return imagem_saida
 
 def main():
-    #imagem original
-    ori = cv2.imread("02.jpg")
-
     #imagem em escala de cinza
-    imagem = cv2.imread("02.jpg", cv2.IMREAD_GRAYSCALE)
+    imagem = cv2.imread("../Imagens/01.jpg", cv2.IMREAD_GRAYSCALE)
 
     #imagem binária
     _, imagem_binaria = cv2.threshold(imagem, 127, 255, cv2.THRESH_BINARY)
