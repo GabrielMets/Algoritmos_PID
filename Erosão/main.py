@@ -45,7 +45,7 @@ def erosao(imagem, elemento_estruturante):
 
 def main():
     #imagem em escala de cinza
-    imagem = cv2.imread("../Imagens/01.jpg", cv2.IMREAD_GRAYSCALE)
+    imagem = cv2.imread("../Imagens/02.jpg", cv2.IMREAD_GRAYSCALE)
 
     #imagem binária
     _, imagem_binaria = cv2.threshold(imagem, 127, 255, cv2.THRESH_BINARY)
