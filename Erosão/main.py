@@ -5,13 +5,12 @@ import cv2
 import copy
 
 def matriz_equal(mat_A, mat_B):
-    flag = True
     for i in range(len(mat_A)):
         for j in range(len(mat_A[0])):
             if mat_A[i][j] != mat_B[i][j]:
-                flag = False
+                return False
 
-    return flag
+    return True
 
 def erosao(imagem, elemento_estruturante):
     #pegar as caracteristicas da imagem binaria e da matriz elemento estruturante  
@@ -45,7 +44,7 @@ def erosao(imagem, elemento_estruturante):
 
 def main():
     #imagem em escala de cinza
-    imagem = cv2.imread("Imagens/02.jpg", cv2.IMREAD_GRAYSCALE)
+    imagem = cv2.imread("../Imagens/02.jpg", cv2.IMREAD_GRAYSCALE)
 
     #imagem binária
     _, imagem_binaria = cv2.threshold(imagem, 127, 255, cv2.THRESH_BINARY)

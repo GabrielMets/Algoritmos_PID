@@ -9,7 +9,6 @@ def sum_matriz(matriz):
     for i in range(len(matriz)):
         for j in range(len(matriz[0])):
             sum += matriz[i][j]
-
     return sum
 
 def dilatacao(imagem, elemento_estruturante):
@@ -35,7 +34,7 @@ def dilatacao(imagem, elemento_estruturante):
             #o roi é uma matriz que extrai um pedaço da imagem com o mesmo tamanho do elemento estruturante
             roi = imagem[i - meio_altura:i + meio_altura + 1, j - meio_largura:j + meio_largura + 1]
             
-            if sum_matriz(roi) > 0:
+            if sum_matriz(roi):
                 imagem_saida[i, j] = 255 #pinta de branco
             else:
                 imagem_saida[i, j] = 0 #pinta de preto
@@ -44,22 +43,18 @@ def dilatacao(imagem, elemento_estruturante):
 
 def main():
     #imagem em escala de cinza
-    imagem = cv2.imread("Imagens/01.jpg", cv2.IMREAD_GRAYSCALE)
+    imagem = cv2.imread("../Imagens/letras.jpg", cv2.IMREAD_GRAYSCALE)
 
     #imagem binária
     _, imagem_binaria = cv2.threshold(imagem, 127, 255, cv2.THRESH_BINARY)
     
-    elemento_estruturante = [[1, 1, 1, 1, 1, 1],
-                            [1, 1, 1, 1, 1, 1],
-                            [1, 1, 1, 1, 1, 1],
-                            [1, 1, 1, 1, 1, 1],
-                            [1, 1, 1, 1, 1, 1],
-                            [1, 1, 1, 1, 1, 1]]
+    elemento_estruturante = [[1, 1],
+                            [1, 1]]
 
     imagem_dilatada = dilatacao(imagem_binaria, elemento_estruturante)
-
-    cv2.imshow("Imagem Binaria", cv2.resize(imagem_binaria, (400, 400)))
-    cv2.imshow("Imagem Dilatada", cv2.resize(imagem_dilatada, (400, 400)))
+    
+    cv2.imshow("Imagem Binaria", imagem_binaria)
+    cv2.imshow("Imagem Dilatada", imagem_dilatada)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
