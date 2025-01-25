@@ -85,7 +85,7 @@ def abertura(img, es):
 
 def main():
     #imagem em escala de cinza
-    imagem = cv2.imread("../Imagens/01.jpg", cv2.IMREAD_GRAYSCALE)
+    imagem = cv2.imread("Imagens/01.jpg", cv2.IMREAD_GRAYSCALE)
 
     #imagem binária
     _, imagem_binaria = cv2.threshold(imagem, 127, 255, cv2.THRESH_BINARY)
@@ -98,8 +98,8 @@ def main():
 
     imagem_aberta = abertura(imagem_binaria, elemento_estruturante)
 
-    cv2.imshow("Imagem Binaria", imagem_binaria)
-    cv2.imshow("Imagem Aberta", imagem_aberta)
+    cv2.imshow("Imagem Binaria", cv2.resize(imagem_binaria, (600,600)))
+    cv2.imshow("Imagem Aberta", cv2.resize(imagem_aberta, (600,600)))
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
